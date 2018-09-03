@@ -6,7 +6,19 @@ module.exports = {
         development: {
             host: "127.0.0.1",
             port: 8545,
-            gas: 7500000,
+            gas: 35000000,
+            network_id: "*" // Match any network id
+        },
+        poc: {
+            host: "192.168.1.102",
+            port: 8500,
+            // gas: 7500000,
+            network_id: "*" // Match any network id
+        },
+        dev: {
+            host: "192.168.99.1",
+            port: 8545,
+            // gas: 7500000,
             network_id: "*" // Match any network id
         },
         kovan: {
@@ -34,7 +46,6 @@ module.exports = {
                     "https://mainnet.infura.io/v3/09c30ad18ed145c3997b0621e1816909")
             },
             network_id: 1
-
         }
     },
     solc: {
