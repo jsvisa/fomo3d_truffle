@@ -1,14 +1,14 @@
 ## 说明
 本项目通过reed 大佬的 [fomo3d_clone](https://github.com/reedhong/fomo3d_clone) 项目改造而成, 感谢 reed 大佬!!!
 
-此项目部署方式经实测仅可用于单节点(如 ganache-cli, testrpc, truffle develop, 私链), 一键的原理是用 `deployer.then` 在合约部署完后调用 set 方法将合约地址赋值  
- 
+此项目部署方式经实测仅可用于单节点(如 ganache-cli, testrpc, truffle develop, 私链), 一键的原理是用 `deployer.then` 在合约部署完后调用 set 方法将合约地址赋值
+
  测试 kovan(infura 节点) 失败, ropsten 有一次成功了, 但后来 gasLimit 又下去了就一直没法测试了
 
- 
+
 ## 本地部署指南
 
-#### 部署合约: 
+#### 部署合约:
 
 > 一共部署了3个合约, 其中3个收款地址被砍掉(改成了部署者的地址), p3d 也砍掉了
 > 3个合约 我偷懒没有把合约地址写死, 用的是后续的 set 方法, 所以如果 truffle migrate 最后那段报错了, 可能没有 set 成功, 需要用其他方式调用( truffle console, 或者 remix 等)
@@ -22,9 +22,9 @@ truffle migrate --reset # 执行后, 复制 FoMo3Dlong: 后跟的地址
 truffle migrate --reset | grep 'FoMo3Dlong: 0x' | awk  '{ print $2 }'
 ```
 
-> 推荐做法   
-> truffle migrate --reset > migrate.log  
-> cat migrate.log  # 查看有无错误, 如合约均部署成功,但最后报错, 可能有几个赋值方法没有执行(我部署到 kovan 时就发生了这事,可以参考 migrations/2_deploy_fomo3d.js逻辑手动执行)  
+> 推荐做法
+> truffle migrate --reset > migrate.log
+> cat migrate.log  # 查看有无错误, 如合约均部署成功,但最后报错, 可能有几个赋值方法没有执行(我部署到 kovan 时就发生了这事,可以参考 migrations/2_deploy_fomo3d.js逻辑手动执行)
 > cat migrate.log | grep 'FoMo3Dlong: 0x' | awk  '{ print $2 }'
 
 #### 部署前端:
@@ -62,3 +62,49 @@ remix-ide  #注意此时处于项目根目录
 [Fomo3D 合约源码分析](https://github.com/gudqs7/fomo3d_truffle/blob/master/Fomo3D-SourceCode.md)
 
 > 主要是对源码所有合约整理归类, 解释下合约都有啥作用, 希望对刚接触 fomo3d, 想学习 fomo3d 的有所帮助!
+
+#### Simple 101
+
+```
+$ truffle console
+
+# instantiation a Fomo3Dlong
+truffle(poc)> f = FoMo3Dlong.at(FoMo3Dlong.address)
+
+# the initialized `airDropPot_` should be 0
+truffle(poc)> f.airDropPot_()
+{ [String: '0000000000000000'] s: 1, e: 15, c: [ 36 ] }
+
+# call the buyXid
+truffle(poc)> f.buyXid(0, 1, {"value": web3.toWei('0.12', 'ether')})
+{ tx: '0x81dbab70e55a3768931bfd14867918623d3c1dc16cf6cc2d862b27ba560254fc',
+  receipt:
+   { blockHash: '0xde29bce3bda0449049a4ebfd56e5aea6665dbca7a51802e7531222b0742aab76',
+     blockNumber: 451,
+     contractAddress: null,
+     cumulativeGasUsed: 168355,
+     from: '0xaf195e6233a9b6898824b4e0cc2796c1dfecc950',
+     gasUsed: 168355,
+     logs: [ [Object] ],
+     logsBloom: '0x00080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000080000000000001000000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000400000000010',
+     status: '0x1',
+     to: '0x84f349513495dc5afcc699e105cac5e8ed60a0a2',
+     transactionHash: '0x81dbab70e55a3768931bfd14867918623d3c1dc16cf6cc2d862b27ba560254fc',
+     transactionIndex: 0 },
+  logs:
+   [ { address: '0x84f349513495dc5afcc699e105cac5e8ed60a0a2',
+       blockNumber: 451,
+       transactionHash: '0x81dbab70e55a3768931bfd14867918623d3c1dc16cf6cc2d862b27ba560254fc',
+       transactionIndex: 0,
+       blockHash: '0xde29bce3bda0449049a4ebfd56e5aea6665dbca7a51802e7531222b0742aab76',
+       logIndex: 0,
+       removed: false,
+       event: 'onEndTx',
+       args: [Object] } ] }
+
+# validate the result by `airDropPot_`
+truffle(poc)> f.airDropPot_()
+{ [String: '1200000000000000'] s: 1, e: 15, c: [ 36 ] }
+truffle(poc)>
+
+```
