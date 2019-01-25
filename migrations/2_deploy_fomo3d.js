@@ -1,15 +1,15 @@
-var FoMo3Dlong = artifacts.require("./FoMo3Dlong.sol");
+var FoMo3Dlong = artifacts.require("FoMo3Dlong");
 
-var SafeMath = artifacts.require("./library/SafeMath.sol");
-var F3Ddatasets = artifacts.require("./library/F3Ddatasets.sol");
-var MSFun = artifacts.require("./library/MSFun.sol");
-var NameFilter = artifacts.require("./library/NameFilter.sol");
-var UintCompressor = artifacts.require("./library/UintCompressor.sol");
-var F3DKeysCalcLong = artifacts.require("./library/F3DKeysCalcLong.sol");
+var SafeMath = artifacts.require("library/SafeMath");
+var F3Ddatasets = artifacts.require("library/F3Ddatasets");
+var MSFun = artifacts.require("library/MSFun");
+var NameFilter = artifacts.require("library/NameFilter");
+var UintCompressor = artifacts.require("library/UintCompressor");
+var F3DKeysCalcLong = artifacts.require("library/F3DKeysCalcLong");
 
-var F3Devents = artifacts.require("./F3Devents.sol");
-var PlayerBook = artifacts.require("./PlayerBook.sol");
-var TeamJust = artifacts.require("./TeamJust.sol");
+var F3Devents = artifacts.require("F3Devents");
+var PlayerBook = artifacts.require("PlayerBook");
+var TeamJust = artifacts.require("TeamJust");
 
 
 module.exports = function (deployer) {
@@ -48,7 +48,7 @@ module.exports = function (deployer) {
         fomo.setPlayerBook(player.address);
         return TeamJust.deployed();
     }).then(function () {
-        fomo.activate({gasPrice: 5500000000}); //快速激活, 慎重啊
+        fomo.activate({gasPrice: 5500000000});
         return F3Ddatasets.deployed();
     }).then(function () {
         player.addGame(fomo.address, 'fomo',{gasPrice: 6000000000});

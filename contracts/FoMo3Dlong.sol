@@ -875,13 +875,14 @@ contract FoMo3Dlong is F3Devents {
             _eventData_ = managePlayer(_pID, _eventData_);
 
         // early round eth limiter
-        if (round_[_rID].eth < 100000000000000000000 && plyrRnds_[_pID][_rID].eth.add(_eth) > 1000000000000000000)
-        {
-            uint256 _availableLimit = (1000000000000000000).sub(plyrRnds_[_pID][_rID].eth);
-            uint256 _refund = _eth.sub(_availableLimit);
-            plyr_[_pID].gen = plyr_[_pID].gen.add(_refund);
-            _eth = _availableLimit;
-        }
+        // 100 && 1
+        // if (round_[_rID].eth < 100000000000000000000 && plyrRnds_[_pID][_rID].eth.add(_eth) > 1000000000000000000)
+        // {
+        //     uint256 _availableLimit = (1000000000000000000).sub(plyrRnds_[_pID][_rID].eth);
+        //     uint256 _refund = _eth.sub(_availableLimit);
+        //     plyr_[_pID].gen = plyr_[_pID].gen.add(_refund);
+        //     _eth = _availableLimit;
+        // }
 
         // if eth left is greater than min eth allowed (sorry no pocket lint)
         if (_eth > 1000000000)
@@ -906,14 +907,14 @@ contract FoMo3Dlong is F3Devents {
             }
 
             // manage airdrops
-            if (_eth >= 100000000000000000)
+            if (_eth >= 100000000000000000) // 0.1
             {
                 airDropTracker_++;
                 if (airdrop() == true)
                 {
                     // gib muni
                     uint256 _prize;
-                    if (_eth >= 10000000000000000000)
+                    if (_eth >= 10000000000000000000) // 10
                     {
                         // calculate prize and give it to winner
                         _prize = ((airDropPot_).mul(75)) / 100;
@@ -924,7 +925,7 @@ contract FoMo3Dlong is F3Devents {
 
                         // let event know a tier 3 prize was won
                         _eventData_.compressedData += 300000000000000000000000000000000;
-                    } else if (_eth >= 1000000000000000000 && _eth < 10000000000000000000) {
+                    } else if (_eth >= 1000000000000000000 && _eth < 10000000000000000000) {  // 1
                         // calculate prize and give it to winner
                         _prize = ((airDropPot_).mul(50)) / 100;
                         plyr_[_pID].win = (plyr_[_pID].win).add(_prize);
@@ -934,7 +935,7 @@ contract FoMo3Dlong is F3Devents {
 
                         // let event know a tier 2 prize was won
                         _eventData_.compressedData += 200000000000000000000000000000000;
-                    } else if (_eth >= 100000000000000000 && _eth < 1000000000000000000) {
+                    } else if (_eth >= 100000000000000000 && _eth < 1000000000000000000) {  // 0.1
                         // calculate prize and give it to winner
                         _prize = ((airDropPot_).mul(25)) / 100;
                         plyr_[_pID].win = (plyr_[_pID].win).add(_prize);
